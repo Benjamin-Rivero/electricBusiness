@@ -4,10 +4,7 @@ import fr.hb.businesscase.dto.UserRegistrationDTO;
 import fr.hb.businesscase.service.AddressService;
 import fr.hb.businesscase.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -19,6 +16,11 @@ public class UserRestController {
     @PostMapping
     public void create(@RequestBody UserRegistrationDTO userRegistrationDTO) {
         userService.createUser(userRegistrationDTO);
+    }
+
+    @GetMapping("/verify")
+    public void verifyAccount(@RequestParam String token){
+        userService.verifyAccount(token);
     }
 
 }
