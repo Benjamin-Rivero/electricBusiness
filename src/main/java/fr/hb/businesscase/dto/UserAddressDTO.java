@@ -9,14 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressRegistrationDTO {
+public class UserAddressDTO {
 
-    private String street;
-
-    private String city;
-
-    private String zipCode;
-
-    private UserAddressDTO userAddressDto;
+    private boolean isBilling;
 
 }

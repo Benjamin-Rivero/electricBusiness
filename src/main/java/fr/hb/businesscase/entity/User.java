@@ -37,25 +37,25 @@ public class User implements SluggerInterface {
     private String activationToken;
 
     @OneToMany(mappedBy = "userTo")
-    private List<UserReview> userReviewsSent;
+    private List<UserReview> userReviewsSent= new ArrayList<>();
 
     @OneToMany(mappedBy = "userFrom")
-    private List<UserReview> userReviewsReceived;
+    private List<UserReview> userReviewsReceived= new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<UserAddress> userAddresses;
+    private List<UserAddress> userAddresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner")
     private List<Address> addresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<UserFavorite> favorites;
+    private List<UserFavorite> favorites= new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Review> reviews;
+    private List<Review> reviews= new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Booking> bookings;
+    private List<Booking> bookings= new ArrayList<>();
 
     private boolean isVerified(){
         return activationToken == null;
