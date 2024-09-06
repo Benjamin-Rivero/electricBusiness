@@ -1,12 +1,15 @@
 package fr.hb.businesscase.entity;
 
+import fr.hb.businesscase.entity.interfaces.SluggerInterface;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 @Entity
@@ -14,7 +17,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User implements SluggerInterface {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -27,7 +30,10 @@ public class User {
     private String phone;
     private LocalDate birthDate;
     private String slug;
+
+    @CreationTimestamp
     private LocalDate creationDate;
+
     private String activationToken;
 
     @OneToMany(mappedBy = "userTo")
@@ -40,7 +46,7 @@ public class User {
     private List<UserAddress> userAddresses;
 
     @OneToMany(mappedBy = "owner")
-    private List<Address> addresses;
+    private List<Address> addresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<UserFavorite> favorites;
@@ -55,4 +61,8 @@ public class User {
         return activationToken == null;
     }
 
+    @Override
+    public String getField() {
+        return firstName+"-"+lastName;
+    }
 }

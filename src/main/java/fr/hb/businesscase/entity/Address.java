@@ -24,11 +24,9 @@ public class Address {
     private String zipCode;
     private String streetNumber;
 
-    private float latitude;
+    private Float latitude;
 
-    private float longitude;
-
-    private boolean isBillingAddress;
+    private Float longitude;
 
     @OneToMany(mappedBy = "address")
     private List<UserAddress> userAddresses;
