@@ -11,7 +11,6 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -75,7 +74,7 @@ public class UserService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        content = content.replace("[[name]]", user.getField());
+        content = content.replace("[[name]]", user.getFullName());
         String verifyURL = "http://localhost:8080/user" + "/verify?token=" + user.getActivationToken();
 
         content = content.replace("[[URL]]", verifyURL);

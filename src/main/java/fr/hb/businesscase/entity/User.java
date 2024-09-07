@@ -65,4 +65,8 @@ public class User implements SluggerInterface {
     public String getField() {
         return firstName+"-"+lastName;
     }
+
+    public String getFullName() {
+        return this.firstName+" "+this.lastName;
+    }
 }
