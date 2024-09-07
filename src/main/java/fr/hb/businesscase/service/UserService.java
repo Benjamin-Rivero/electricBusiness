@@ -99,4 +99,12 @@ public class UserService {
         }
 
     }
+
+    public User findByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public User findBySlug(String slug){
+        return userRepository.findBySlug(slug).orElseThrow(EntityNotFoundException::new);
+    }
 }
