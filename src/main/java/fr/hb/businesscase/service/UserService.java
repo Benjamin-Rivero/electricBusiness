@@ -107,4 +107,8 @@ public class UserService {
     public User findBySlug(String slug){
         return userRepository.findBySlug(slug).orElseThrow(EntityNotFoundException::new);
     }
+
+    public User findById(String userId) {
+        return userRepository.findByUuid(userId).orElseThrow(EntityNotFoundException::new);
+    }
 }
