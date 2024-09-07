@@ -25,4 +25,6 @@ public class UrlRoute {
     public static final String POWER = "/power";
     public static final String POWER_NEW = POWER+"/new";
 
+    public static final String STATION = "/station";
+    public static final String STATION_NEW = STATION+"/new" ;
 }

@@ -21,7 +21,7 @@ public class User implements SluggerInterface {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
+    private String uuid;
 
     private String firstName;
     private String lastName;

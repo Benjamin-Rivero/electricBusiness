@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -43,7 +44,7 @@ public class ChargingStation {
     private Power power;
 
     @OneToMany(mappedBy="station")
-    private List<Media> media;
+    private List<Media> media = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -51,7 +52,7 @@ public class ChargingStation {
             joinColumns = @JoinColumn(name = "station_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "address_id")
