@@ -22,4 +22,7 @@ public class UrlRoute {
     public static final String USER_EDIT = USER_PROFILE+"/edit";
     public static final String USER_VERIFY = USER + "/verify";
 
+    public static final String POWER = "/power";
+    public static final String POWER_NEW = POWER+"/new";
+
 }

@@ -20,6 +20,6 @@ public class Power {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int amount;
+    private float amount;
 
 }
