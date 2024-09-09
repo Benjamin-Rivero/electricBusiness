@@ -22,7 +22,7 @@ public class ChargingStationService {
         station.setAutoAcceptBooking(false);
         station.setOnStand(chargingStationDTO.isOnStand());
         station.setPower(powerService.findPowerById(chargingStationDTO.getPowerId()));
-        Address address = addressService.createAddressFromStation(chargingStationDTO.getAddressStation());
+        Address address = addressService.findById(chargingStationDTO.getAddressStationId());
         station.setAddress(address);
         return chargingStationRepository.saveAndFlush(station);
     }

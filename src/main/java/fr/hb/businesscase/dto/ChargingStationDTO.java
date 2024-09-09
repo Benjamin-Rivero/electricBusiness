@@ -19,6 +19,6 @@ public class ChargingStationDTO {
 
     private boolean onStand;
 
-    private AddressStationDTO addressStation;
+    private Long addressStationId;
 
 }

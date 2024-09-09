@@ -4,6 +4,7 @@ import fr.hb.businesscase.dto.AddressRegistrationDTO;
 import fr.hb.businesscase.dto.AddressStationDTO;
 import fr.hb.businesscase.entity.Address;
 import fr.hb.businesscase.repository.AddressRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,8 @@ public class AddressService {
         return addressRepository.saveAndFlush(address);
     }
 
-
+    public Address findById(Long id){
+        return addressRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
 
 }
