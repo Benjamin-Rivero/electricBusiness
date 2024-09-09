@@ -15,9 +15,9 @@ public class AddressStationDTO {
 
     private String city;
 
-    private float longitude;
+    private double longitude;
 
-    private float latitude;
+    private double latitude;
 
     private String userId;
 }

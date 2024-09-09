@@ -34,6 +34,8 @@ public class User implements SluggerInterface {
     @CreationTimestamp
     private LocalDate creationDate;
 
+    private String role;
+
     private String activationToken;
 
     @OneToMany(mappedBy = "userTo")

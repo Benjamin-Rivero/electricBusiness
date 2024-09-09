@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
 
-    List<Address> findByLongitudeBetweenAndLatitudeBetween(float longitude, float latitude, float longitude2, float latitude2);
+    List<Address> findByLongitudeBetweenAndLatitudeBetween(double longitude, double latitude, double longitude2, double latitude2);
 
 }
