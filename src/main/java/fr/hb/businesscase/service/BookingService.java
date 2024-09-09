@@ -2,12 +2,14 @@ package fr.hb.businesscase.service;
 
 import fr.hb.businesscase.dto.BookingDTO;
 import fr.hb.businesscase.entity.Booking;
+import fr.hb.businesscase.entity.User;
 import fr.hb.businesscase.repository.BookingRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -43,6 +45,16 @@ public class BookingService {
         Booking booking = findById(id);
         booking.setStatus(false);
         return bookingRepository.saveAndFlush(booking);
+    }
+
+    public List<Booking> findBookingsInProgressByUser(String userId){
+        User user = userService.findById(userId);
+        return bookingRepository.findByStatusNotAndUser(false,user);
+    }
+
+    public List<Booking> findPastBookingsByUser(String userId){
+        User user = userService.findById(userId);
+        return bookingRepository.findPastBookings(user);
     }
 
 }
