@@ -27,6 +27,9 @@ public class UrlRoute {
 
     public static final String STATION = "/station";
     public static final String STATION_NEW = STATION+"/new" ;
+    public static final String STATION_SHOW = STATION+"/{id}";
+    public static final String STATION_EDIT = STATION_SHOW+"/edit";
+    public static final String STATION_SET_RATE = STATION_SHOW+"/rate";
 
     public static final String ADDRESS = "/address";
     public static final String ADDRESS_NEW_FOR_STATION = ADDRESS+"/newStationAddress";
