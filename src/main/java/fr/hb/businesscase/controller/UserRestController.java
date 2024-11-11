@@ -13,11 +13,6 @@ public class UserRestController {
 
     private final UserService userService;
 
-    @PostMapping(UrlRoute.USER)
-    public void create(@RequestBody UserRegistrationDTO userRegistrationDTO) {
-        userService.createUser(userRegistrationDTO);
-    }
-
     @GetMapping(UrlRoute.USER_VERIFY)
     public void verifyAccount(@RequestParam String token){
         userService.verifyAccount(token);

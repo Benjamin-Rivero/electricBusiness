@@ -1,35 +1,43 @@
 package fr.hb.businesscase.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import fr.hb.businesscase.json_views.JsonViewUserReview;
 
 import java.time.LocalDate;
-@Entity
-@Getter
-@Setter
-@AllArgsConstructor
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Data
 public class UserReview {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "receiver_id")
-    private User userTo;
+	@JsonView(JsonViewUserReview.Content.class)
+	private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User userFrom;
+	@JsonView(JsonViewUserReview.Rating.class)
+	private float rating;
 
-    private String content;
+	@JsonView(JsonViewUserReview.CreatedAt.class)
+	private LocalDate createdAt;
 
-    private int rating;
+	@JsonView(JsonViewUserReview.UpdatedAt.class)
+	private LocalDateTime updatedAt;
 
-    private LocalDate creationDate;
+	@ManyToOne
+	private User userFrom;
+
+	@ManyToOne
+	private User userTo;
+
+
 
 }

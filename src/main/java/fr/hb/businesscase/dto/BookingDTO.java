@@ -16,12 +16,14 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class BookingDTO {
 
-    private Long stationId;
+    private String stationId;
 
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
 
     private String userId;
+
+    private Long userAddressId;
 
 }

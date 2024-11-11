@@ -1,41 +1,52 @@
 package fr.hb.businesscase.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import fr.hb.businesscase.json_views.JsonViewAddress;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Data
 public class Address {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String street;
-    private String city;
-    private String zipCode;
-    private String streetNumber;
+	@JsonView(JsonViewAddress.StreetNumber.class)
+	private String streetNumber;
 
-    private Double latitude;
+	@JsonView(JsonViewAddress.StreetName.class)
+	private String streetName;
 
-    private Double longitude;
+	@JsonView(JsonViewAddress.Latitude.class)
+	private String latitude;
 
-    @OneToMany(mappedBy = "address")
-    private List<UserAddress> userAddresses;
+	@JsonView(JsonViewAddress.Longitude.class)
+	private String longitude;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
+	@JsonView(JsonViewAddress.ZipCode.class)
+	private String zipCode;
 
-    @OneToMany(mappedBy = "address")
-    private List<ChargingStation> chargingStations;
+	@JsonView(JsonViewAddress.City.class)
+	private String city;
+
+	@OneToMany(mappedBy = "address")
+	private List<UserAddress> userAddresses = new ArrayList<>();
+
+	@OneToMany(mappedBy = "address")
+	private List<Station> stations = new ArrayList<>();
+
+	@ManyToOne
+	private User owner;
+
+
 
 }

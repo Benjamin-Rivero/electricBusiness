@@ -11,13 +11,17 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AddressStationDTO {
 
-    private String street;
+    private String streetNumber;
+
+    private String streetName;
 
     private String city;
 
-    private double longitude;
+    private String zipCode;
 
-    private double latitude;
+    private String longitude;
+
+    private String latitude;
 
     private String userId;
 }

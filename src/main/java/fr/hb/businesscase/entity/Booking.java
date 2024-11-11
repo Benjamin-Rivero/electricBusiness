@@ -1,46 +1,45 @@
 package fr.hb.businesscase.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.Data;
+import fr.hb.businesscase.json_views.JsonViewBooking;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
-@Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Data
 public class Booking {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 
-    private LocalDateTime startDate;
+	@JsonView(JsonViewBooking.StartedAt.class)
+	private LocalDateTime startedAt;
 
-    private LocalDateTime endDate;
+	@JsonView(JsonViewBooking.FinishedAt.class)
+	private LocalDateTime finishedAt;
 
-    @CreationTimestamp
-    private LocalDate creation_date;
+	@JsonView(JsonViewBooking.Status.class)
+	private String status;
 
-    private Boolean status;
+	@JsonView(JsonViewBooking.CreatedAt.class)
+	private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "station_id")
-    private ChargingStation charging_station;
+	@ManyToOne
+	private UserAddress userAddress;
 
-    @ManyToOne
-    @JoinColumn(name = "user_uuid")
-    private User user;
+	@ManyToOne
+	private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "user_address_id")
-    private UserAddress user_address;
+	@ManyToOne
+	private Station station;
+
 
 
 }

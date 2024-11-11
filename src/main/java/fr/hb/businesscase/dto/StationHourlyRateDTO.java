@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class StationHourlyRateDTO {
 
-    private int hourlyRate;
+    private int value;
 
 }

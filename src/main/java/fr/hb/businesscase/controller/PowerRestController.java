@@ -1,6 +1,9 @@
 package fr.hb.businesscase.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
+import fr.hb.businesscase.custom_response.CustomResponse;
+import fr.hb.businesscase.dto.PowerDTO;
 import fr.hb.businesscase.entity.Power;
 import fr.hb.businesscase.mapping.UrlRoute;
 import fr.hb.businesscase.service.PowerService;
@@ -16,8 +19,8 @@ public class PowerRestController {
     private final PowerService powerService;
 
     @PostMapping(UrlRoute.POWER_NEW)
-    public void create(@RequestBody Power power){
-        powerService.createPower(power);
+    public CustomResponse<Power> create(@RequestBody PowerDTO powerDTO){
+        return powerService.createPower(powerDTO);
     }
 
 }

@@ -1,74 +1,100 @@
 package fr.hb.businesscase.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import fr.hb.businesscase.entity.interfaces.SluggerInterface;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.Data;
+import fr.hb.businesscase.json_views.JsonViewUser;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
-@Entity
-@Getter
-@Setter
-@AllArgsConstructor
+
 @NoArgsConstructor
-public class User implements SluggerInterface {
+@AllArgsConstructor
+@Entity
+@Data
+public class User implements UserDetails, SluggerInterface {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String uuid;
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
-    private String phone;
-    private LocalDate birthDate;
-    private String slug;
+	@JsonView(JsonViewUser.Email.class)
+	@Column(unique = true)
+	private String email;
 
-    @CreationTimestamp
-    private LocalDate creationDate;
+	@JsonView(JsonViewUser.Password.class)
+	private String password;
 
-    private String role;
+	@JsonView(JsonViewUser.LastName.class)
+	private String lastName;
 
-    private String activationToken;
+	@JsonView(JsonViewUser.FirstName.class)
+	private String firstName;
 
-    @OneToMany(mappedBy = "userTo")
-    private List<UserReview> userReviewsSent= new ArrayList<>();
+	@JsonView(JsonViewUser.Phone.class)
+	private String phone;
 
-    @OneToMany(mappedBy = "userFrom")
-    private List<UserReview> userReviewsReceived= new ArrayList<>();
+	@JsonView(JsonViewUser.BirthDate.class)
+	private LocalDate birthDate;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserAddress> userAddresses = new ArrayList<>();
+	private String activationToken;
 
-    @OneToMany(mappedBy = "owner")
-    private List<Address> addresses = new ArrayList<>();
+	private LocalDateTime activationTokenSentAt;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserFavorite> favorites= new ArrayList<>();
+	@JsonView(JsonViewUser.CreatedAt.class)
+	private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user")
-    private List<Review> reviews= new ArrayList<>();
+	private String roles;
 
-    @OneToMany(mappedBy = "user")
-    private List<Booking> bookings= new ArrayList<>();
+	@JsonView(JsonViewUser.Slug.class)
+	private String slug;
 
-    private boolean isVerified(){
-        return activationToken == null;
-    }
 
-    @Override
-    public String getField() {
-        return firstName+"-"+lastName;
-    }
+	@OneToMany(mappedBy = "userFrom")
+	private List<UserReview> userReviewsReceived = new ArrayList<>();
 
-    public String getFullName() {
-        return this.firstName+" "+this.lastName;
-    }
+	@OneToMany(mappedBy = "userTo")
+	private List<UserReview> userReviewsSent = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user")
+	private List<Booking> bookings = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user")
+	private List<UserAddress> userAddresses = new ArrayList<>();
+
+	@OneToMany(mappedBy = "owner")
+	private List<Address> addresses = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user")
+	private List<Favorite> favorites = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user")
+	private List<Review> reviews = new ArrayList<>();
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of();
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+
+	@Override
+	public String getField() {
+		return getFullName();
+	}
+
+	public String getFullName() {
+		return firstName+" "+lastName;
+	}
 }

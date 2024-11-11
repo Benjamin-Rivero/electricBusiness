@@ -1,35 +1,37 @@
 package fr.hb.businesscase.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import fr.hb.businesscase.json_views.JsonViewUserAddress;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Data
 public class UserAddress {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+    @JsonView(JsonViewUserAddress.IsBilling.class)
+    private boolean isBilling;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "address_id")
     private Address address;
 
-    private boolean isBilling;
+    @OneToMany(mappedBy = "userAddress")
+    private List<Booking> booking = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user_address")
-    private List<Booking> bookings;
+
 
 }

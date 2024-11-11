@@ -11,7 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AddressRegistrationDTO {
 
-    private String street;
+    private String streetNumber;
+
+    private String streetName;
 
     private String city;
 

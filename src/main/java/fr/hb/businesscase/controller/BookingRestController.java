@@ -18,12 +18,12 @@ public class BookingRestController {
     }
 
     @GetMapping(UrlRoute.BOOKING_ACCEPT)
-    public void acceptBooking(@PathVariable Long id){
+    public void acceptBooking(@PathVariable String id){
         bookingService.acceptBooking(id);
     }
 
     @GetMapping(UrlRoute.BOOKING_REFUSE)
-    public void refuseBooking(@PathVariable Long id){
+    public void refuseBooking(@PathVariable String id){
         bookingService.refuseBooking(id);
     }
 

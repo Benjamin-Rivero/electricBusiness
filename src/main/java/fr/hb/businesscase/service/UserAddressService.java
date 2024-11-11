@@ -7,6 +7,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class UserAddressService {
@@ -17,7 +19,11 @@ public class UserAddressService {
         return userAddressRepository.saveAndFlush(userAddress);
     }
 
-    public UserAddress findByUser(User user) {
-        return userAddressRepository.findByUser(user).orElseThrow(EntityNotFoundException::new);
+    public List<UserAddress> findByUser(User user) {
+        return userAddressRepository.findByUser(user);
+    }
+
+    public UserAddress findById(Long userAddressId) {
+        return userAddressRepository.findById(userAddressId).orElseThrow(EntityNotFoundException::new);
     }
 }

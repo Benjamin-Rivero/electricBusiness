@@ -1,9 +1,10 @@
 package fr.hb.businesscase.repository;
 
-import fr.hb.businesscase.entity.ChargingStation;
+import jakarta.persistence.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import fr.hb.businesscase.entity.Station;
 
 @Repository
-public interface ChargingStationRepository extends JpaRepository<ChargingStation, Long> {
+public interface StationRepository extends JpaRepository<Station, String> {
 }

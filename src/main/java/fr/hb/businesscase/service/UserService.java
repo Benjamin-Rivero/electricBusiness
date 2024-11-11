@@ -6,6 +6,7 @@ import fr.hb.businesscase.entity.Address;
 import fr.hb.businesscase.entity.User;
 import fr.hb.businesscase.entity.UserAddress;
 import fr.hb.businesscase.repository.UserRepository;
+import fr.hb.businesscase.security.PasswordEncoderConfig;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,20 +14,24 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
-//    private PasswordEncoderConfig encoder;
+    private PasswordEncoderConfig encoder;
 
-    private Environment env;
-
-    private JavaMailSender mailSender;
+    private final EmailService emailService;
 
     private final UserRepository userRepository;
     private final AddressService addressService;
@@ -45,48 +50,21 @@ public class UserService {
         user.setEmail(userRegistrationDTO.getEmail());
         user.setFirstName(userRegistrationDTO.getFirstName());
         user.setLastName(userRegistrationDTO.getLastName());
-//        user.setPassword(encoder.passwordEncoder().encode(userRegistrationDTO.getPassword()));
+        user.setPassword(encoder.passwordEncoder().encode(userRegistrationDTO.getPassword()));
         user.setPassword(userRegistrationDTO.getPassword());
         user.setPhone(userRegistrationDTO.getPhone());
         user.setActivationToken(UUID.randomUUID().toString());
+        user.setActivationTokenSentAt(LocalDateTime.now());
         user.setBirthDate(userRegistrationDTO.getBirthDate());
         user = userRepository.saveAndFlush(user);
         userAddress = userAddressService.createUserAddressFromRegistration(userAddress);
         user.getUserAddresses().add(userAddress);
         try {
-            sendVerificationEmail(user);
+            emailService.sendVerificationEmail(user);
         } catch (MessagingException | UnsupportedEncodingException e){
             e.printStackTrace();
         }
         return userRepository.saveAndFlush(user);
-    }
-
-    public void sendVerificationEmail(User user) throws MessagingException, UnsupportedEncodingException {
-        String toAddress = user.getEmail();
-        String fromAddress = env.getProperty("spring.mail.username");
-        String subject = "Please verify your registration";
-        String content = "Dear [[name]],<br>"
-                + "Please click the link below to verify your registration:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-                + "Thank you,<br>"
-                + "Electricity Business.";
-
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        content = content.replace("[[name]]", user.getFullName());
-        String verifyURL = "http://localhost:8080/user" + "/verify?token=" + user.getActivationToken();
-
-        content = content.replace("[[URL]]", verifyURL);
-        System.out.println(content);
-
-        helper.setTo(toAddress);
-        helper.setFrom(fromAddress);
-        helper.setSubject(subject);
-        helper.setText(content,true);
-
-
-        mailSender.send(message);
     }
 
     public void verifyAccount(String token) {
@@ -109,6 +87,33 @@ public class UserService {
     }
 
     public User findById(String userId) {
-        return userRepository.findByUuid(userId).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> optionalUser = userRepository.findByEmail(username);
+        optionalUser.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = optionalUser.get();
+
+        if(!user.isEnabled()) return null;
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                userGrantedAuthority(user.getRoles())
+        );
+    }
+
+    private List<GrantedAuthority> userGrantedAuthority(String role) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        List<String> roles = Collections.singletonList(role);
+        roles.forEach(r -> {
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+            if (r.contains("ADMIN")) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            }
+        });
+        return authorities;
     }
 }
